@@ -121,6 +121,7 @@ alias sudo='sudo'
 # グローバルエイリアス
 alias -g L='| less'
 alias -g G='| grep'
+alias -g st='status'
 
 # C で表じゅう出力をクリップボードにコピーする
 if which pbcopy > /dev/null 2>&1 ; then
