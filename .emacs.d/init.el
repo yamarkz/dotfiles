@@ -148,37 +148,17 @@
 (defvar my-lines-page-mode t)
 (defvar my-mode-line-format)
 
-;; --------------------------------------------------------
-;; @auto-install.el
+;;; packages:
+(when (or (require 'cask "~/.cask/cask.el" t)
+          (require 'cask nil t))
+  (cask-initialize))
+(package-initialize)
 
-;; パッケージのインストールを自動化
-;; http://www.emacswiki.org/emacs/auto-install.el
-(when(require 'auto-install nil t)
-  (setq auto-install-directory "~/.emacs.d/elisp/")
-  (auto-install-update-emacswiki-package-name t)
-  (auto-install-compatibility-setup))
-
-
-;; ---------------------------------------------------------
-;; @color-theme.el
-
-;; Emacsのカラーテーマ
-;; http://code.google.com/p/gnuemacscolorthemetest/
-(when(and(require 'color-theme nil t)(window-system))
-  (color-theme-initialize)
-  (color-theme-clarity)
-  (color-theme-comidia))
-
-;; ---------------------------------------------------------
-;; @redo+.el
-
-;; redoできるようにする
-;; http:/www.emacswiki.org/emacs/redo+.el
-(when(require 'redo+ nil t)
-  (define-key global-map(kbd "C-u") 'redo))
-
-;; ---------------------------------------------------------
-;; @menu-tree.el
+;;; color-theme:
+(require 'color-theme)
+(color-theme-initialize)
+(color-theme-clarity)
+(color-theme-comidia)
 
 ;; メニューバー日本語化
 ;; http://www11.atwiki.jp/s-irie/pages/13.html
@@ -187,13 +167,6 @@
     (setq menu-tree-coding-system 'utf-8))
 (require 'menu-tree nil t)
 
-;; --------------------------------------------------------
-;; @tabbar.el
-
-;; タブ化
-;; http://wwww.emacswiki.org/emacs/tabbar.el
-;; (require 'cl)
-(require 'tabbar nil t)
 
 ;; scratch buffer以外をまとめてタブに表示する
 (setq tabbar-buffer-groups-function
@@ -226,58 +199,3 @@
          ,on-no-prefix
        ,on-prefix)))
 
-;; GUIで直接ファイルを開いた場合フレームを作成しない
-(add-hook 'before-make-frame-hook
-          (lambda()
-            (when(eq tabbar-mode t)
-              (switch-to-buffer (buffer-name))
-              (delete-this-frame))))
-
-;; -----------------------------------------------------
-;; @multi-term.el
-
-;; 端末エミュレータ
-;; http://www.emacswiki.org/emacs/multi-term.el
-(when (require 'multi-term nil t)
-  (setq multi-term-program "/usr/local/bin/zsh"))
-
-;; -----------------------------------------------------
-;; @auto-async-byte-compile.el
-
-;; 自動コンパイル
-;; http://www.emacswiki.org/emacs/auto-async-byte-compile.el
-(when (require 'auto-async-byte-compile nil t)
-  ;; 自動コンパイルを無効にするファイル名の正規表現
-  (setq auto-async-byte-compile-exclude-files-regexp "init.el")
-  (add-hook 'emacs-lisp-mode-hook 'enable-auto-async-byte-compile-mode))
-
-;; -----------------------------------------------------
-;; @Uniquify.el
-
-;; 同盟バッファをわかりやすくする
-(require 'uniquify)
-(setq uniquify-buffer-name-style 'forward)
-(setq uniquify-buffer-name-style 'post-forward-angel-brackets)
-(setq uniquify-ignore-buffers-re "*[^*]+*")
-
-;; ----------------------------------------------------
-;; @auto-complete.el
-
-;; 自動補完機能
-;; https://github.com/m2ym/auto-complete
-(when (require 'auto-complete-config nil t)
-  (add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
-  (setq ac-ignore-case t)
-  (ac-config-default))
-
-;; ---------------------------------------------------
-;; @eldoc.el/eldoc-extension.el
-
-;; カーソル付近にあるEmacs Lispの関数や変数のヘルプをエコーエリアに表示
-;; http://www.emacswiki.org/emacs/eldoc-extension.el
-(when (require 'eldoc-extension nil t)
-  (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
-  (add-hook 'lisp-interaction-mode-hook 'tum-on-eldoc-mode)
-  (add-hook 'ielm-mode-hook 'tum-on-eldoc-mode)
-  (setq eldoc-idle-delay 0.2)
-  (setq eldoc-minor-mode-string ""))
