@@ -1,14 +1,14 @@
 # dotfiles
 
 ## 参考
-- 本家
+- 本家  
 https://www.gnu.org/software/emacs/
 
-- MacOS Emacs
+- MacOS Emacs  
 https://emacsformacosx.com/
 
-- るびきち大先生
+- るびきち大先生  
 http://rubikitch.com/
 
-- Qiita
+- Qiita  
 http://qiita.com/tadsan/items/6c658cc471be61cbc8f6
