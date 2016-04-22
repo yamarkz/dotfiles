@@ -16,65 +16,191 @@
 (add-to-load-path "elisp")
 
 ;; -------------------------------------------------
-;; @ general
+;; 文字コード
+;; -------------------------------------------------
+;; ------------------------------------
+;; 表:Emacsでのエンコーディング名       |
+;; | 名前      | Emacsでの名前          |
+;; |-----------+------------------------|
+;; | UTF-8     | utf-8                  |
+;; | shift_JIS | sjis, shift_jis, cp932 |
+;; | EUC-JP    | euc-jp, euc-japan　　　|
+;; | JIS       | junet, iso-2022-jp     |
+;; -------------------------------------
+;; 表:改行コードと接尾辞
+;; | OS       | 改行 | 接尾辞 |
+;; | Windows  | \r\n | --dos  |
+;; | Mac      | \n   | --max  |
+;; | Linux等  | \n   | --unix |
+(set-locale-environment nil)
+(set-language-environment "Japanese")
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(set-buffer-file-coding-system 'utf-8)
+(setq default-buffer-file-coding-system 'utf-8)
+(set-default-coding-systems 'utf-8)
+(prefer-coding-system 'utf-8)
 
-;; common lisp
+
+
+;; -------------------------------------
+;; emacs  package管理 Cask
+;; -------------------------------------
+(when (or (require 'cask "~/.cask/cask.el" t)
+          (require 'cask nil t))
+  (cask-initialize))
+(package-initialize)
+
+
+
+;; -------------------------------------
+;; emacs color-theme
+;; -------------------------------------
+(require 'color-theme)
+(color-theme-initialize)
+(color-theme-clarity)
+(color-theme-comidia)
+
+
+;; -------------------------------------------------
+;; 基本操作設定
+;; -------------------------------------------------
+
+;; Common Lisp必要
 (require 'cl)
 
-;; 文字コード
-(set-language-environment "Japanese")
-(let ((ws window-system))
-  (cond ((eq ws 'w32)
-	 (prefer-coding-systems 'utf-8-unix)
-	 (set-default-coding-systems 'utf-8-unix)
-	 (setq file-name-coding-system 'sjis)
-	 (setq locale-coding-system 'utf-8))
-	((eq ws 'ns)
-	 (require 'ucs-normalize)
-	 (prefer-coding-system 'utf-8-hfs)
-	 (setq file-name-coding-system 'utf-8-hfs)
-	 (setq locale-coding-system 'utf-8-hfs))))
+;; ~ backup-file を作らない
+(setq make-backup-files nil)
 
-;; Macで英数と日本語にRictyを指定
-(let ((ws window-system))
-  (cond ((eq ws 'w32)
-     (set-face-attribute default nil
-                :family "Meiryo" ;; 変数
-		:height 100)
-     (set-fontset-font nil japanese-jisx0208 (font-spec :family "Meiriyo"))) ;; 日本語
-    ((eq ws 'ns)
-     (set-face-attribute default nil
-		 :family "Ricty" ;; 英数
-		 :height 140)
-     (set-fontest-font nil japanese-jisx0208 (font-spec :family "Ricty"))))) ;; 日本語
+;; # backup-file を作らない
+(setq auto-save-default nil)
 
-;; スタートアップ非表示
+;; backup-file を作らない
+(setq backup-inhibited t)
+
+;; delete auto-save-file at edit ending
+(setq delete-auto-save-files t)
+
+;; file-pointerを記憶しておく
+(require 'saveplace)
+(setq-default save-place t)
+
+;; start-up-screen 非表示
 (setq inhibit-startup-screen t)
 
-;; scratchの初期メッセージ消去
+;; scratch first-message erasing
 (setq initial-scratch-message "")
 
-;; ツールバー非表示
-(tool-bar-mode -1)
+;; menu-bar非表示
+(menu-bar-mode -1)
 
-;; メニューバーを非表示
-;; (menu-bar-mode -1)
-
-;; スクロールバー非表示
-(set-scroll-bar-mode nil)
-
-;; タイトルバーにファイルをフルパス表示
+;; title-barにfile-full-path表示
 (setq frame-title-format
-      (format "%%f -Emacs@%s" (system-name)))
+      (format "%%f - Emacs@%s" (system-name)))
 
 ;; 行番号表示
 (global-linum-mode t)
 (set-face-attribute 'linum nil
-	    :foreground "#800"
-	    :height 0.9)
+                    :foreground "yellow"
+                    :height 0.2)
 
 ;; 行番号フォーマット
-;; (setq linum-format "%4d")
+(set linum-format "%4d  ")
+
+;; c-h => backspace
+(keyboard-translate ?\C-h ?\C-?)
+(global-set-key "\C-h" 'backward-delete-char)
+
+;; M-h => 単語単位でbackspace
+(global-set-key (kbd "M-h") 'backward-kill-word)
+
+;; 画面中央にする
+(global-unset-key (kbd "C-l"));;prefix-keyとする
+(global-set-key (kbd "C-l C-l") 'recenter-top-bottom)
+
+;; 置換key-bind
+(global-set-key (kbd "C-l r") 'query-replace)
+(global-set-key (kbd "C-l R") 'query-replace-regexp)
+
+;; 前後error箇所へのjump
+(global-set-key (kbd "M-}") 'next-error)
+(global-set-key (kbd "M-{") 'previous-error)
+
+;; C-c C-SPC => rectangle-select(矩形探索)
+(cua-mode t)
+(setq cua-enable-cua-keys nil)
+(define-key global-map (kbd "C-c C-SPC") 'cua-set-rectangle-mark)
+
+;; mode-lineに行番号を表示
+(line-number-mode t)
+
+;; display row-number on the mode-line
+(column-number-mode t)
+
+;; display tome-date(dayOfTheWeek/month/day)
+(setq display-time-day-and-date t)
+
+;; between the lines
+(setq-default line-spacing 0.2)
+
+;; tab-width
+(setq-default tab-width 2)
+
+;; tab convert space
+(setq-default indent-tabs-mode nil)
+
+
+;; display underline on the edit-number-line
+(defface my-hl-line-face
+  ;; 背景がdarkならば背景色を紺に
+  '((((class color) (background dark))
+    (:background "NavyBlue" t))
+   ;; 背景がLightならば背景色を緑に
+   (((class color) (background light))
+    (:background "Yellow" t))
+   (t (:bold t)))
+  "hl-line's my face")
+(setq hl-line-face 'my-hl-line-face)
+(global-hl-line-mode t)
+
+;; parentheses highlight underline
+(show-paren-mode t)
+(setq show-paren-delay 0)
+(setq show-paren-style 'expression)
+(set-face-background 'show-paren-match-face nil)
+(set-face-underline-p 'show-paren-match-face "underline")
+
+;; select-region-color
+(set-face-background 'region "dark slate blue")
+
+;; display emphasis end of line
+(setq-default show-trailing-whitespace t)
+(set-face-background 'trailing-whitespace "#b14770")
+
+;; create newline- next-final-line
+(setq require-final-newline t)
+
+;; no create newline end-of-buffer
+(setq next-line-add-newlines nil)
+
+;; display time on the mode-line
+(display-time-mode t)
+
+;; display recent-open-file-list
+(recentf-mode t)
+
+;; copy/pasteをclipboardで行う
+(cond (window-system
+       (setq x-select-enable-clipboard t)))
+
+;; file名の補完で大小区別なし
+(setq completion-ignore-case t)
+
+;; ツールバー非表示
+(tool-bar-mode -1)
+
+;; スクロールバー非表示
+(set-scroll-bar-mode nil)
 
 ;; 括弧の範囲内を強調表示
 (show-paren-mode t)
@@ -94,9 +220,6 @@
 ;; タブをスペースで扱う
 (setq-default indent-tabs-mode nil)
 
-;; タブ幅
-(custom-set-variables '(tab-width 4))
-
 ;; yes or no をy or n
 (fset 'yes-or-no-p 'y-or-n-p)
 
@@ -115,12 +238,6 @@
 ;; ミニバッファの履歴の保存数を増やす
 (setq history-length 3000)
 
-;; バックアップを残さない
-(setq make-backup-files nil)
-
-;; 行間
-(setq-default line-spaceing 0)
-
 ;; 1行ずつスクロール
 (setq scroll-conservatively 35
       scroll-margin 0
@@ -129,12 +246,6 @@
 
 ;; フレームの透明度
 (set-frame-parameter (selected-frame) 'alpha '(0.85))
-
-;; モードラインに行番号表示
-(line-number-mode t)
-
-;; モードラインに列番号表示
-(column-number-mode t)
 
 ;; C-Ret で矩形選択
 ;; 詳しいキーバインド操作: http://dev.ariel-networks.com/articles/emacs/part5/
@@ -148,17 +259,6 @@
 (defvar my-lines-page-mode t)
 (defvar my-mode-line-format)
 
-;;; packages:
-(when (or (require 'cask "~/.cask/cask.el" t)
-          (require 'cask nil t))
-  (cask-initialize))
-(package-initialize)
-
-;;; color-theme:
-(require 'color-theme)
-(color-theme-initialize)
-(color-theme-clarity)
-(color-theme-comidia)
 
 ;; メニューバー日本語化
 ;; http://www11.atwiki.jp/s-irie/pages/13.html
