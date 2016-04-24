@@ -1,4 +1,4 @@
-				      ;-*- Mode:Emacs-Lisp;Coding: utf-8 -*-
+              ;-*- Mode:Emacs-Lisp;Coding: utf-8 -*-
 ;; --------------------------------------------------
 ;; @load-path
 
@@ -7,9 +7,9 @@
   (let (path)
     (dolist (path paths paths)
       (let ((default-directory (expand-file-name (concat user-emacs-directory path))))
-	(add-to-list 'load-path default-directory)
-	(if (fboundp 'normal-top-level-add-subdirs-to-load-path)
-	    (normal-top-level-add-subdirs-to-load-path))))))
+  (add-to-list 'load-path default-directory)
+  (if (fboundp 'normal-top-level-add-subdirs-to-load-path)
+      (normal-top-level-add-subdirs-to-load-path))))))
 
 ;; load-pathに追加するフォルダ
 ;; 2つ以上フォルダを指定する場合の引数 => (add-to-path "elisp" "xxx" "xxx")
@@ -46,12 +46,8 @@
 ;; -------------------------------------
 ;; emacs  package管理 Cask
 ;; -------------------------------------
-(when (or (require 'cask "~/.cask/cask.el" t)
-          (require 'cask nil t))
-  (cask-initialize))
-(package-initialize)
-
-
+(require 'cask "/usr/local/opt/cask/cask.el")
+(cask-initialize)
 
 ;; -------------------------------------
 ;; emacs color-theme
@@ -149,6 +145,10 @@
 ;; tab convert space
 (setq-default indent-tabs-mode nil)
 
+;; Helm config
+(require 'helm-config)
+(global-set-key (kbd "C-c h") 'helm-mini)
+(helm-mode 1)
 
 ;; display underline on the edit-number-line
 (defface my-hl-line-face
