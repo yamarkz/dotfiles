@@ -34,6 +34,10 @@
 ;; -------------------------------------
 (require 'cask "/usr/local/opt/cask/cask.el")
 (cask-initialize)
+(package-initialize)
+
+(require 'use-package)
+(pallet-mode t)
 
 ;; -------------------------------------
 ;; emacs color-theme
@@ -132,9 +136,17 @@
 (setq-default indent-tabs-mode nil)
 
 ;; Helm config
-(require 'helm-config)
-(global-set-key (kbd "C-c h") 'helm-mini)
-(helm-mode 1)
+(use-package helm :defer t
+  :diminish helm-mode
+  :init
+  (require 'helm-config)
+  (bind-key "C-x C-f" 'helm-find-files)
+  (bind-key "M-x" 'helm-M-x)
+  (helm-mode t))
+
+;(require 'helm-config)
+;(global-set-key (kbd "C-c h") 'helm-mini)
+;(helm-mode 1)
 
 ;; display underline on the edit-number-line
 (defface my-hl-line-face
@@ -148,6 +160,7 @@
   "hl-line's my face")
 (setq hl-line-face 'my-hl-line-face)
 (global-hl-line-mode t)
+
 
 ;; parentheses highlight underline
 (show-paren-mode t)
