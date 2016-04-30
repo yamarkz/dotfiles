@@ -58,6 +58,7 @@
 ;; ~ backup-file を作らない
 (setq make-backup-files nil)
 
+
 ;; # backup-file を作らない
 (setq auto-save-default nil)
 
@@ -144,9 +145,50 @@
   (bind-key "M-x" 'helm-M-x)
   (helm-mode t))
 
-;(require 'helm-config)
-;(global-set-key (kbd "C-c h") 'helm-mini)
-;(helm-mode 1)
+;; Flycheck
+(use-package flycheck
+  :diminish flycheck-mode
+  :init
+  (global-flycheck-mode t)
+  :config
+  (flycheck-package-setup))
+
+;; Ruby
+(use-package enh-ruby-mode :defer t
+  :mode (("\\.rb\\'" . enh-ruby-mode)
+         ("\\.rake\\'" . enh-ruby-mode))
+  :interpreter "pry"
+  :config
+  (use-package robe)
+  (defun my/enh-ruby-hook ()
+    (set (make-local-variable 'ac-ignore-case) t))
+  (subword-mode t)
+  (yard-mode t)
+  (add-to-list 'ac-modes 'enh-ruby-mode)
+  (custom-set-variables
+   '(ruby-deep-indent-paren-style nil))
+  (setq-default enh-ruby-node-insert-magic-comment t)
+  (add-hook 'robe-mode-hook 'ac-robe-setup))
+
+;;; begin enh-ruby-mode patch
+;;; http://qiita.com/vzvu3k6k/items/acec84d829a3dbe1427a
+(defadvice enh-ruby-mode-set-encoding (around stop-enh-ruby-mode-set-encoding)
+  "If enh-ruby-not-insert-magic-comment is true, stops enh-ruby-mode-set-encoding."
+  (if (and (boundp 'enh-ruby-not-insert-magic-comment)
+           (not enh-ruby-not-insert-magic-comment))
+      ad-do-it))
+(ad-activate 'enh-ruby-mode-set-encoding)
+(setq-default enh-ruby-not-insert-magic-comment t)
+;;; enh-ruby-mode patch ends here
+
+;; inf-ruby
+(use-package inf-ruby :defer t
+  :config
+  (custom-set-variables
+   '(inf-ruby-default-implementation "pry")
+   '(inf-ruby-eval-binding "Pry.topeval_binding"))
+  (add-hook 'inf-ruby-mode-hook 'ansi-color-for-comint-mode-on))
+
 
 ;; display underline on the edit-number-line
 (defface my-hl-line-face
@@ -286,14 +328,3 @@
 (setq tabbar-scroll-left-button-enabled "")
 (setq tabbar-scroll-right-button-disabled "")
 (setq tabbar-scroll-left-button-disabled "")
-
-;; Ctrl-Tab, Ctrl-Shift-Tab でタブを切り替える
-(dolist (func '(tabbar-mode tabbar-forward-tab tabbar-forward-group tabbar-backward-tab tabbar-backward-group))
-  (autoload func "tabbar" "Tabs at the top of buffers and easy control-tab navigation"))
-(defmacro defun-prefix-alt (name on-no-prefix on-prefix &optional do-always)
-  '(defun ,name (arg)
-     (interactive "P")
-     ,do-always
-     (if (equal nil arg)
-         ,on-no-prefix
-       ,on-prefix)))
