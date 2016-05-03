@@ -136,6 +136,15 @@
 ;; tab convert space
 (setq-default indent-tabs-mode nil)
 
+;; Auto-Complete
+(use-package auto-complete
+  :diminish auto-complete-mode
+  :config
+  (add-to-list 'ac-dictionary-directories (locate-user-emacs-file "./ac-dict"))
+  (require 'auto-complete-config)
+  (ac-config-default)
+  (global-auto-complete-mode t))
+
 ;; Helm config
 (use-package helm :defer t
   :diminish helm-mode
@@ -160,11 +169,11 @@
   :interpreter "pry"
   :config
   (use-package robe)
-  (defun my/enh-ruby-hook ()
+  (defun my/enh-ruby-mode-hook ()
     (set (make-local-variable 'ac-ignore-case) t))
   (subword-mode t)
   (yard-mode t)
-  (add-to-list 'ac-modes 'enh-ruby-mode)
+  ;;(add-to-list 'ac-modes 'enh-ruby-mode)
   (custom-set-variables
    '(ruby-deep-indent-paren-style nil))
   (setq-default enh-ruby-node-insert-magic-comment t)
