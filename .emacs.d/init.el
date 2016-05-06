@@ -136,6 +136,15 @@
 ;; tab convert space
 (setq-default indent-tabs-mode nil)
 
+;; Undo Tree
+(use-package undo-tree
+  :diminish undo-tree-mode
+  :init
+  (global-undo-tree-mode)
+  (bind-key "C-_" #'undo-tree-undo)
+  (bind-key "C-_" #'undo-tree-redo))
+
+
 ;; Auto-Complete
 (use-package auto-complete
   :diminish auto-complete-mode
@@ -212,7 +221,6 @@
 (setq hl-line-face 'my-hl-line-face)
 (global-hl-line-mode t)
 
-
 ;; parentheses highlight underline
 (show-paren-mode t)
 (setq show-paren-delay 0)
@@ -222,6 +230,7 @@
 
 ;; select-region-color
 (set-face-background 'region "dark slate blue")
+
 
 ;; display emphasis end of line
 (setq-default show-trailing-whitespace t)
@@ -331,9 +340,7 @@
            )
            (buffer-list))))
 
-;; ボタンをシンプルにする
-(setq tabbar-home-button-enabled "")
-(setq tabbar-scroll-right-button-enabled "")
-(setq tabbar-scroll-left-button-enabled "")
-(setq tabbar-scroll-right-button-disabled "")
-(setq tabbar-scroll-left-button-disabled "")
+(global-set-key (kbd "C-c <left>") 'windmove-left)
+(global-set-key (kbd "C-c <down>") 'windmove-down)
+(global-set-key (kbd "C-c <up>")   'windmove-up)
+(global-set-key (kbd "C-c <right>") 'windmove-right)
