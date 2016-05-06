@@ -163,6 +163,23 @@
   (bind-key "M-x" 'helm-M-x)
   (helm-mode t))
 
+;; helm-ag
+(custom-set-variables '(helm-ff-file-compressed-list '("epub" "gz" "bz2" "zip" "7z")))
+(bind-key "C-x s" 'helm-ag)
+
+;; helm-swoop
+(use-package helm-swoop
+              :init
+              (bind-key "C-x o" 'helm-swoop)
+              (bind-key "M-C-;" 'helm-multi-swoop))
+
+;; Magit
+(setq-default magit-auto-revert-mode nil)
+(setq vc-handled-backends '())
+(eval-after-load "vc" '(remove-hook 'find-file-hooks 'vc-find-file-hook))
+(bind-key "C-x m" 'magit-status)
+(bind-key "C-c l" 'magit-blame)
+
 ;; Flycheck
 (use-package flycheck
   :diminish flycheck-mode
