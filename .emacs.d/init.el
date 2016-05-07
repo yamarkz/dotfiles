@@ -52,7 +52,7 @@
 ;; 基本操作設定
 ;; -------------------------------------------------
 
-;; Common Lisp必要
+;; デバッグモードでの起動
 (require 'cl)
 
 ;; ~ backup-file を作らない
@@ -136,114 +136,7 @@
 ;; tab convert space
 (setq-default indent-tabs-mode nil)
 
-;; Undo Tree
-(use-package undo-tree
-  :diminish undo-tree-mode
-  :init
-  (global-undo-tree-mode)
-  (bind-key "C-_" #'undo-tree-undo)
-  (bind-key "C-_" #'undo-tree-redo))
 
-
-;; Auto-Complete
-(use-package auto-complete
-  :diminish auto-complete-mode
-  :config
-  (add-to-list 'ac-dictionary-directories (locate-user-emacs-file "./ac-dict"))
-  (require 'auto-complete-config)
-  (ac-config-default)
-  (global-auto-complete-mode t))
-
-;; Helm config
-(use-package helm :defer t
-  :diminish helm-mode
-  :init
-  (require 'helm-config)
-  (bind-key "C-x C-f" 'helm-find-files)
-  (bind-key "M-x" 'helm-M-x)
-  (helm-mode t))
-
-;; helm-ag
-(custom-set-variables '(helm-ff-file-compressed-list '("epub" "gz" "bz2" "zip" "7z")))
-(bind-key "C-x s" 'helm-ag)
-
-;; helm-swoop
-(use-package helm-swoop
-              :init
-              (bind-key "C-x o" 'helm-swoop)
-              (bind-key "M-C-;" 'helm-multi-swoop))
-
-;; Magit
-(setq-default magit-auto-revert-mode nil)
-(setq vc-handled-backends '())
-(eval-after-load "vc" '(remove-hook 'find-file-hooks 'vc-find-file-hook))
-(bind-key "C-x m" 'magit-status)
-(bind-key "C-c l" 'magit-blame)
-
-;; Flycheck
-(use-package flycheck
-  :diminish flycheck-mode
-  :init
-  (global-flycheck-mode t)
-  :config
-  (flycheck-package-setup))
-
-;; Ruby
-(use-package enh-ruby-mode :defer t
-  :mode (("\\.rb\\'" . enh-ruby-mode)
-         ("\\.rake\\'" . enh-ruby-mode))
-  :interpreter "pry"
-  :config
-  (use-package robe)
-  (defun my/enh-ruby-mode-hook ()
-    (set (make-local-variable 'ac-ignore-case) t))
-  (subword-mode t)
-  (yard-mode t)
-  ;;(add-to-list 'ac-modes 'enh-ruby-mode)
-  (custom-set-variables
-   '(ruby-deep-indent-paren-style nil))
-  (setq-default enh-ruby-node-insert-magic-comment t)
-  (add-hook 'robe-mode-hook 'ac-robe-setup))
-
-;;; begin enh-ruby-mode patch
-;;; http://qiita.com/vzvu3k6k/items/acec84d829a3dbe1427a
-(defadvice enh-ruby-mode-set-encoding (around stop-enh-ruby-mode-set-encoding)
-  "If enh-ruby-not-insert-magic-comment is true, stops enh-ruby-mode-set-encoding."
-  (if (and (boundp 'enh-ruby-not-insert-magic-comment)
-           (not enh-ruby-not-insert-magic-comment))
-      ad-do-it))
-(ad-activate 'enh-ruby-mode-set-encoding)
-(setq-default enh-ruby-not-insert-magic-comment t)
-;;; enh-ruby-mode patch ends here
-
-;; inf-ruby
-(use-package inf-ruby :defer t
-  :config
-  (custom-set-variables
-   '(inf-ruby-default-implementation "pry")
-   '(inf-ruby-eval-binding "Pry.topeval_binding"))
-  (add-hook 'inf-ruby-mode-hook 'ansi-color-for-comint-mode-on))
-
-
-;; display underline on the edit-number-line
-(defface my-hl-line-face
-  ;; 背景がdarkならば背景色を紺に
-  '((((class color) (background dark))
-    (:background "NavyBlue" t))
-   ;; 背景がLightならば背景色を緑に
-   (((class color) (background light))
-    (:background "Yellow" t))
-   (t (:bold t)))
-  "hl-line's my face")
-(setq hl-line-face 'my-hl-line-face)
-(global-hl-line-mode t)
-
-;; parentheses highlight underline
-(show-paren-mode t)
-(setq show-paren-delay 0)
-(setq show-paren-style 'expression)
-(set-face-background 'show-paren-match-face nil)
-(set-face-underline-p 'show-paren-match-face "underline")
 
 ;; select-region-color
 (set-face-background 'region "dark slate blue")
@@ -322,6 +215,114 @@
 
 ;; フレームの透明度
 (set-frame-parameter (selected-frame) 'alpha '(0.85))
+
+;; Undo Tree
+(use-package undo-tree
+  :diminish undo-tree-mode
+  :init
+  (global-undo-tree-mode)
+  (bind-key "C-_" #'undo-tree-undo)
+  (bind-key "C-_" #'undo-tree-redo))
+
+;; Auto-Complete
+(use-package auto-complete
+  :diminish auto-complete-mode
+  :config
+  (add-to-list 'ac-dictionary-directories (locate-user-emacs-file "./ac-dict"))
+  (require 'auto-complete-config)
+  (ac-config-default)
+  (global-auto-complete-mode t))
+
+;; Helm config
+(use-package helm :defer t
+  :diminish helm-mode
+  :init
+  (require 'helm-config)
+  (bind-key "C-x C-f" 'helm-find-files)
+  (bind-key "M-x" 'helm-M-x)
+  (helm-mode t))
+
+;; helm-ag
+(custom-set-variables '(helm-ff-file-compressed-list '("epub" "gz" "bz2" "zip" "7z")))
+(bind-key "C-x s" 'helm-ag)
+
+;; helm-swoop
+(use-package helm-swoop
+              :init
+              (bind-key "C-x w" 'helm-swoop)
+              (bind-key "M-C-;" 'helm-multi-swoop))
+
+;; Magit
+(setq-default magit-auto-revert-mode nil)
+(setq vc-handled-backends '())
+(eval-after-load "vc" '(remove-hook 'find-file-hooks 'vc-find-file-hook))
+(bind-key "C-x m" 'magit-status)
+(bind-key "C-c l" 'magit-blame)
+
+;; Flycheck
+(use-package flycheck
+  :diminish flycheck-mode
+  :init
+  (global-flycheck-mode t)
+  :config
+  (flycheck-package-setup))
+
+;; Ruby
+(use-package enh-ruby-mode :defer t
+  :mode (("\\.rb\\'" . enh-ruby-mode)
+         ("\\.rake\\'" . enh-ruby-mode))
+  :interpreter "pry"
+  :config
+  (use-package robe)
+  (defun my/enh-ruby-mode-hook ()
+    (set (make-local-variable 'ac-ignore-case) t))
+  (subword-mode t)
+  (yard-mode t)
+  ;;(add-to-list 'ac-modes 'enh-ruby-mode)
+  (custom-set-variables
+   '(ruby-deep-indent-paren-style nil))
+  (setq-default enh-ruby-node-insert-magic-comment t)
+  (add-hook 'robe-mode-hook 'ac-robe-setup))
+
+;;; begin enh-ruby-mode patch
+;;; http://qiita.com/vzvu3k6k/items/acec84d829a3dbe1427a
+(defadvice enh-ruby-mode-set-encoding (around stop-enh-ruby-mode-set-encoding)
+  "If enh-ruby-not-insert-magic-comment is true, stops enh-ruby-mode-set-encoding."
+  (if (and (boundp 'enh-ruby-not-insert-magic-comment)
+           (not enh-ruby-not-insert-magic-comment))
+      ad-do-it))
+(ad-activate 'enh-ruby-mode-set-encoding)
+(setq-default enh-ruby-not-insert-magic-comment t)
+;;; enh-ruby-mode patch ends here
+
+;; inf-ruby
+(use-package inf-ruby :defer t
+  :config
+  (custom-set-variables
+   '(inf-ruby-default-implementation "pry")
+   '(inf-ruby-eval-binding "Pry.topeval_binding"))
+  (add-hook 'inf-ruby-mode-hook 'ansi-color-for-comint-mode-on))
+
+
+;; display underline on the edit-number-line
+(defface my-hl-line-face
+  ;; 背景がdarkならば背景色を紺に
+  '((((class color) (background dark))
+    (:background "NavyBlue" t))
+   ;; 背景がLightならば背景色を緑に
+   (((class color) (background light))
+    (:background "Yellow" t))
+   (t (:bold t)))
+  "hl-line's my face")
+(setq hl-line-face 'my-hl-line-face)
+(global-hl-line-mode t)
+
+;; parentheses highlight underline
+(show-paren-mode t)
+(setq show-paren-delay 0)
+(setq show-paren-style 'expression)
+(set-face-background 'show-paren-match-face nil)
+(set-face-underline-p 'show-paren-match-face "underline")
 
 ;; C-Ret で矩形選択
 ;; 詳しいキーバインド操作: http://dev.ariel-networks.com/articles/emacs/part5/
