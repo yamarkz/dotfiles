@@ -55,17 +55,9 @@
 ;; デバッグモードでの起動
 (require 'cl)
 
-;; ~ backup-file を作らない
 (setq make-backup-files nil)
-
-
-;; # backup-file を作らない
 (setq auto-save-default nil)
-
-;; backup-file を作らない
 (setq backup-inhibited t)
-
-;; delete auto-save-file at edit ending
 (setq delete-auto-save-files t)
 
 ;; file-pointerを記憶しておく
@@ -118,29 +110,14 @@
 (setq cua-enable-cua-keys nil)
 (define-key global-map (kbd "C-c C-SPC") 'cua-set-rectangle-mark)
 
-;; mode-lineに行番号を表示
-(line-number-mode t)
-
-;; display row-number on the mode-line
-(column-number-mode t)
-
-;; display tome-date(dayOfTheWeek/month/day)
-(setq display-time-day-and-date t)
-
 ;; between the lines
-(setq-default line-spacing 0.2)
+(setq-default line-spacing 5)
 
 ;; tab-width
 (setq-default tab-width 2)
 
 ;; tab convert space
 (setq-default indent-tabs-mode nil)
-
-
-
-;; select-region-color
-(set-face-background 'region "dark slate blue")
-
 
 ;; display emphasis end of line
 (setq-default show-trailing-whitespace t)
@@ -166,25 +143,9 @@
 (setq completion-ignore-case t)
 
 ;; ツールバー非表示
-(tool-bar-mode -1)
-
-;; スクロールバー非表示
-(set-scroll-bar-mode nil)
-
-;; 括弧の範囲内を強調表示
-(show-paren-mode t)
-(setq show-paren-delay 0)
-(setq show-paren-style 'expression)
-
-;; 括弧の範囲色
-(set-face-background 'show-paren-match-face "#500")
-
-;; 選択領域の色
-(set-face-background 'region "#555")
-
-;; 行末の白色を強調表示
-(setq-default show-trailing-whitespace t)
-(set-face-background 'trailing-whitespace "#b14770")
+(if window-system
+    (tool-bar-mode -1)
+  (menu-bar-mode -1)
 
 ;; タブをスペースで扱う
 (setq-default indent-tabs-mode nil)
@@ -243,7 +204,13 @@
   (helm-mode t))
 
 ;; helm-ag
-(custom-set-variables '(helm-ff-file-compressed-list '("epub" "gz" "bz2" "zip" "7z")))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(helm-ff-file-compressed-list (quote ("epub" "gz" "bz2" "zip" "7z")))
+ '(magit-log-arguments (quote ("--graph" "--decorate" "-n256"))))
 (bind-key "C-x s" 'helm-ag)
 
 ;; helm-swoop
