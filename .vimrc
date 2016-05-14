@@ -1,3 +1,38 @@
+"NeoBundle Scripts-----------------------------
+if &compatible
+  set nocompatible               " Be iMproved
+endif
+
+" Required:
+set runtimepath^=/Users/yamaguchikazuteru/.vim/bundle/neobundle.vim/
+
+" Required:
+call neobundle#begin(expand('/Users/yamaguchikazuteru/.vim/bundle'))
+
+" Let NeoBundle manage NeoBundle
+" Required:
+NeoBundleFetch 'Shougo/neobundle.vim'
+
+" Add or remove your Bundles here:
+NeoBundle 'Shougo/neosnippet.vim'
+NeoBundle 'Shougo/neosnippet-snippets'
+NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'ctrlpvim/ctrlp.vim'
+NeoBundle 'flazz/vim-colorschemes'
+
+" You can specify revision/branch/tag.
+NeoBundle 'Shougo/vimshell', { 'rev' : '3787e5' }
+
+" Required:
+call neobundle#end()
+
+" Required:
+filetype plugin indent on
+
+" If there are uninstalled bundles found on startup,
+" this will conveniently prompt you to install them.
+NeoBundleCheck
+"End NeoBundle Scripts-------------------------)}))
 
 " タブによる補完機能を可能にする
 set nocompatible
@@ -96,14 +131,14 @@ set wrapscan
 " エクスプローラーで開く時のディレクトリ
 set browsedir=buffer
 
-" vim日本語ヘルプ
-helptags ~/.vim/doc/
-
 " 保存時に行末の空白を除去する
 autocmd BufWritePre * :%s/\s\+$//e
 
 " 矩形選択自由範囲移動
 set virtualedit+=block
+
+" vimを立ち上げた時に、自動的にvim-indent-guidesをオンにする
+let g:indent_guides_enable_on_vim_startup = 1
 
 
 " **************************************************************
@@ -122,6 +157,12 @@ syntax on
 " **************************************************************
 " 各PLUGIN
 " **************************************************************
+
+" ファイルをtreeで表示してくれる
+NeoBundle 'scrooloose/nerdtree'
+
+" インデントに色をつけて見やすくする
+NeoBundle 'nathanaelkane/vim-indent-guides'
 
 " **************************************************************
 " 各vim script
