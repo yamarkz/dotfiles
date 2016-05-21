@@ -164,8 +164,30 @@ NeoBundle 'scrooloose/nerdtree'
 " インデントに色をつけて見やすくする
 NeoBundle 'nathanaelkane/vim-indent-guides'
 
+" Ruby向けにendを自動挿入してくれる
+NeoBundle 'tpope/vim-endwise'
+
 " **************************************************************
 " 各vim script
 " **************************************************************
+
+
+" http://inari.hatenablog.com/entry/2014/05/05/231307
+""""""""""""""""""""""""""""""
+" 全角スペースの表示
+""""""""""""""""""""""""""""""
+function! ZenkakuSpace()
+  highlight ZenkakuSpace cterm=underline ctermfg=lightblue guibg=darkgray
+endfunction
+
+if has('syntax')
+  augroup ZenkakuSpace
+  autocmd!
+  autocmd ColorScheme * call ZenkakuSpace()
+  autocmd VimEnter,WinEnter,BufRead * let w:m1=matchadd('ZenkakuSpace','')
+augroup END
+call ZenkakuSpace()
+endif
+"""""""""""""""""""""""""""""
 
 
