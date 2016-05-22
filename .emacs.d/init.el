@@ -35,7 +35,6 @@
 (require 'cask "/usr/local/opt/cask/cask.el")
 (cask-initialize)
 (package-initialize)
-
 (require 'use-package)
 (pallet-mode t)
 
@@ -46,7 +45,6 @@
 (color-theme-initialize)
 (color-theme-clarity)
 (color-theme-comidia)
-
 
 ;; -------------------------------------------------
 ;; 基本操作設定
@@ -105,6 +103,10 @@
 (global-set-key (kbd "M-}") 'next-error)
 (global-set-key (kbd "M-{") 'previous-error)
 
+;;; wdired.el
+(require 'wdired)
+(define-key dired-mode-map "r" 'wdired-change-to-wdired-mode)
+
 ;; C-c C-SPC => rectangle-select(矩形探索)
 (cua-mode t)
 (setq cua-enable-cua-keys nil)
@@ -114,10 +116,10 @@
 (setq-default line-spacing 5)
 
 ;; tab-width
-(setq-default tab-width 2)
+;;(setq-default tab-width 2)
 
 ;; tab convert space
-(setq-default indent-tabs-mode nil)
+;;(setq-default indent-tabs-mode nil)
 
 ;; display emphasis end of line
 (setq-default show-trailing-whitespace t)
@@ -145,10 +147,7 @@
 ;; ツールバー非表示
 (if window-system
     (tool-bar-mode -1)
-  (menu-bar-mode -1)
-
-;; タブをスペースで扱う
-(setq-default indent-tabs-mode nil)
+  (menu-bar-mode -1))
 
 ;; yes or no をy or n
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -270,7 +269,6 @@
    '(inf-ruby-eval-binding "Pry.topeval_binding"))
   (add-hook 'inf-ruby-mode-hook 'ansi-color-for-comint-mode-on))
 
-
 ;; display underline on the edit-number-line
 (defface my-hl-line-face
   ;; 背景がdarkならば背景色を紺に
@@ -303,15 +301,6 @@
 (defvar my-lines-page-mode t)
 (defvar my-mode-line-format)
 
-
-;; メニューバー日本語化
-;; http://www11.atwiki.jp/s-irie/pages/13.html
-(if (and(= emacs-major-version 22)
-        (eq window-system 'x))
-    (setq menu-tree-coding-system 'utf-8))
-(require 'menu-tree nil t)
-
-
 ;; scratch buffer以外をまとめてタブに表示する
 (setq tabbar-buffer-groups-function
       (lambda (b) (list "All Buffers")))
@@ -320,10 +309,10 @@
         (remove-if
          (lambda(buffer)
            (unless (string-match (buffer-name buffer)
-                         "\\(*scratch*\\|*Apropos*\\|*shell*\\|*eshell*\\|*Customize*\\)")
-            (find (aref (buffer-name buffer) 0) "*"))
+                                 "\\(*scratch*\\|*Apropos*\\|*shell*\\|*eshell*\\|*Customize*\\)")
+             (find (aref (buffer-name buffer) 0) "*"))
            )
-           (buffer-list))))
+                    (buffer-list))))
 
 (global-set-key (kbd "C-c <left>") 'windmove-left)
 (global-set-key (kbd "C-c <down>") 'windmove-down)
