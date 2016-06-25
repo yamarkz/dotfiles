@@ -46,80 +46,25 @@
 (color-theme-clarity)
 (color-theme-comidia)
 
-;; -------------------------------------------------
-;; 基本操作設定
-;; -------------------------------------------------
+;; display underline on the edit-number-line
+(defface my-hl-line-face
+  ;; 背景がdarkならば背景色を紺に
+  '((((class color) (background dark))
+    (:background "NavyBlue" t))
+   ;; 背景がLightならば背景色を緑に
+   (((class color) (background light))
+    (:background "Yellow" t))
+   (t (:bold t)))
+  "hl-line's my face")
+(setq hl-line-face 'my-hl-line-face)
+(global-hl-line-mode t)
 
-;; デバッグモードでの起動
-(require 'cl)
+;; フレームの透明度
+(set-frame-parameter (selected-frame) 'alpha '(0.85))
 
-(setq make-backup-files nil)
-(setq auto-save-default nil)
-(setq backup-inhibited t)
-(setq delete-auto-save-files t)
-
-;; file-pointerを記憶しておく
-(require 'saveplace)
-(setq-default save-place t)
-
-;; start-up-screen 非表示
-(setq inhibit-startup-screen t)
-
-;; scratch first-message erasing
-(setq initial-scratch-message "")
-
-;; menu-bar非表示
-(menu-bar-mode -1)
-
-;; title-barにfile-full-path表示
-(setq frame-title-format
-      (format "%%f - Emacs@%s" (system-name)))
-
-;; 行番号表示
-(global-linum-mode t)
-(set-face-attribute 'linum nil
-                    :foreground "yellow"
-                    :height 0.2)
-
-;; 行番号フォーマット
-(set linum-format "%4d  ")
-
-;; c-h => backspace
-(keyboard-translate ?\C-h ?\C-?)
-(global-set-key "\C-h" 'backward-delete-char)
-
-;; M-h => 単語単位でbackspace
-(global-set-key (kbd "M-h") 'backward-kill-word)
-
-;; 画面中央にする
-(global-unset-key (kbd "C-l"));;prefix-keyとする
-(global-set-key (kbd "C-l C-l") 'recenter-top-bottom)
-
-;; 置換key-bind
-(global-set-key (kbd "C-l r") 'query-replace)
-(global-set-key (kbd "C-l R") 'query-replace-regexp)
-
-;; 前後error箇所へのjump
-(global-set-key (kbd "M-}") 'next-error)
-(global-set-key (kbd "M-{") 'previous-error)
-
-;;; wdired.el
-(require 'wdired)
-(define-key dired-mode-map "r" 'wdired-change-to-wdired-mode)
-
-;; C-c C-SPC => rectangle-select(矩形探索)
-(cua-mode t)
-(setq cua-enable-cua-keys nil)
-(define-key global-map (kbd "C-c C-SPC") 'cua-set-rectangle-mark)
 
 ;; between the lines
 (setq-default line-spacing 5)
-
-;; tab-width
-;;(setq-default tab-width 2)
-
-;; tab convert space
-;;(setq-default indent-tabs-mode nil)
 
 ;; display emphasis end of line
 (setq-default show-trailing-whitespace t)
@@ -173,8 +118,53 @@
       scroll-step 1)
 (setq comint-scroll-show-maximum-output t) ;; shell-mode
 
-;; フレームの透明度
-(set-frame-parameter (selected-frame) 'alpha '(0.85))
+;; -------------------------------------------------
+;; 基本操作設定
+;; -------------------------------------------------
+
+;; デバッグモードでの起動
+(require 'cl)
+
+(setq make-backup-files nil)
+(setq auto-save-default nil)
+(setq backup-inhibited t)
+(setq delete-auto-save-files t)
+
+;; file-pointerを記憶しておく
+(require 'saveplace)
+(setq-default save-place t)
+
+;; start-up-screen 非表示
+(setq inhibit-startup-screen t)
+
+;; scratch first-message erasing
+(setq initial-scratch-message "")
+
+;; menu-bar非表示
+(menu-bar-mode -1)
+
+;; title-barにfile-full-path表示
+(setq frame-title-format
+      (format "%%f - Emacs@%s" (system-name)))
+
+;; 行番号表示
+(global-linum-mode t)
+(set-face-attribute 'linum nil
+                    :foreground "yellow"
+                    :height 0.2)
+
+;; 行番号フォーマット
+(set linum-format "%4d  ")
+
+;; c-h => backspace
+(keyboard-translate ?\C-h ?\C-?)
+(global-set-key "\C-h" 'backward-delete-char)
+
+;; M-h => 単語単位でbackspace
+(global-set-key (kbd "M-h") 'backward-kill-word)
+
+;;; wdired
+(use-package wdired)
 
 ;; Undo Tree
 (use-package undo-tree
@@ -182,7 +172,7 @@
   :init
   (global-undo-tree-mode)
   (bind-key "C-_" #'undo-tree-undo)
-  (bind-key "C-_" #'undo-tree-redo))
+  (bind-key "C-?" #'undo-tree-redo))
 
 ;; Auto-Complete
 (use-package auto-complete
@@ -204,19 +194,15 @@
 
 ;; helm-ag
 (custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
  '(helm-ff-file-compressed-list (quote ("epub" "gz" "bz2" "zip" "7z")))
  '(magit-log-arguments (quote ("--graph" "--decorate" "-n256"))))
 (bind-key "C-x s" 'helm-ag)
 
 ;; helm-swoop
 (use-package helm-swoop
-              :init
-              (bind-key "C-x w" 'helm-swoop)
-              (bind-key "M-C-;" 'helm-multi-swoop))
+  :init
+  (bind-key "C-x w" 'helm-swoop)
+  (bind-key "M-C-;" 'helm-multi-swoop))
 
 ;; Magit
 (setq-default magit-auto-revert-mode nil)
@@ -235,8 +221,8 @@
 
 ;; Ruby
 (use-package enh-ruby-mode :defer t
-  :mode (("\\.rb\\'" . enh-ruby-mode)
-         ("\\.rake\\'" . enh-ruby-mode))
+  :mode (("\\.rb\\'". enh-ruby-mode)
+	 ("\\.rake\\'". enh-ruby-mode))
   :interpreter "pry"
   :config
   (use-package robe)
@@ -244,21 +230,10 @@
     (set (make-local-variable 'ac-ignore-case) t))
   (subword-mode t)
   (yard-mode t)
-  ;;(add-to-list 'ac-modes 'enh-ruby-mode)
   (custom-set-variables
    '(ruby-deep-indent-paren-style nil))
   (setq-default enh-ruby-node-insert-magic-comment t)
   (add-hook 'robe-mode-hook 'ac-robe-setup))
-
-;;; begin enh-ruby-mode patch
-;;; http://qiita.com/vzvu3k6k/items/acec84d829a3dbe1427a
-(defadvice enh-ruby-mode-set-encoding (around stop-enh-ruby-mode-set-encoding)
-  "If enh-ruby-not-insert-magic-comment is true, stops enh-ruby-mode-set-encoding."
-  (if (and (boundp 'enh-ruby-not-insert-magic-comment)
-           (not enh-ruby-not-insert-magic-comment))
-      ad-do-it))
-(ad-activate 'enh-ruby-mode-set-encoding)
-(setq-default enh-ruby-not-insert-magic-comment t)
 ;;; enh-ruby-mode patch ends here
 
 ;; inf-ruby
@@ -269,18 +244,8 @@
    '(inf-ruby-eval-binding "Pry.topeval_binding"))
   (add-hook 'inf-ruby-mode-hook 'ansi-color-for-comint-mode-on))
 
-;; display underline on the edit-number-line
-(defface my-hl-line-face
-  ;; 背景がdarkならば背景色を紺に
-  '((((class color) (background dark))
-    (:background "NavyBlue" t))
-   ;; 背景がLightならば背景色を緑に
-   (((class color) (background light))
-    (:background "Yellow" t))
-   (t (:bold t)))
-  "hl-line's my face")
-(setq hl-line-face 'my-hl-line-face)
-(global-hl-line-mode t)
+(custom-set-variables '(helm-ff-file-compressed-list '("epub" "gz" "bz2" "zip" "7z")))
+(bind-key "C-:" 'helm-ag)
 
 ;; parentheses highlight underline
 (show-paren-mode t)
@@ -295,24 +260,12 @@
 (setq cua-enable-cua-kets nil)
 
 ;; neotree
-
 (global-set-key [f8] 'neotree-toggle)
-
-;; 隠しファイルをデフォルトで表示
 (setq neo-show-hidden-files t)
-
-;; neotree でファイルを新規作成した後、自動的にファイルを開く
 (setq neo-create-file-auto-open t)
-
-;; delete-other-window で neotree ウィンドウを消さない
 (setq neo-persist-show t)
-
-;; キーバインドをシンプルにする
 (setq neo-keymap-style 'concise)
-
-;; neotree ウィンドウを表示するごとに current file のあるディレクトリを表示する
 (setq neo-smart-open t)
-
 
 ;; ------------------------------------------------------------
 ;; @modeline
