@@ -18,15 +18,15 @@
 ;; | Windows  | \r\n | --dos  |
 ;; | Mac      | \n   | --max  |
 ;; | Linux等  | \n   | --unix |
-(set-locale-environment nil)
-(set-language-environment "Japanese")
-(set-terminal-coding-system 'utf-8)
-(set-keyboard-coding-system 'utf-8)
-(set-buffer-file-coding-system 'utf-8)
-(setq default-buffer-file-coding-system 'utf-8)
-(set-default-coding-systems 'utf-8)
-(prefer-coding-system 'utf-8)
 
+(set-locale-environment nil)
+(set-language-environment 'Japanese)
+(prefer-coding-system 'utf-8)
+(set-default-coding-systems 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(setq make-backup-files nil)
+(setq delete-auto-save-files t)
+(setq use-dialog-box nil)
 
 
 ;; -------------------------------------
@@ -59,16 +59,16 @@
 (setq hl-line-face 'my-hl-line-face)
 (global-hl-line-mode t)
 
+;;; Environment
+
 ;; フレームの透明度
 (set-frame-parameter (selected-frame) 'alpha '(0.85))
-
 
 ;; between the lines
 (setq-default line-spacing 5)
 
 ;; display emphasis end of line
 (setq-default show-trailing-whitespace t)
-(set-face-background 'trailing-whitespace "#b14770")
 
 ;; create newline- next-final-line
 (setq require-final-newline t)
@@ -97,21 +97,6 @@
 ;; yes or no をy or n
 (fset 'yes-or-no-p 'y-or-n-p)
 
-;; 最近使ったファイルをメニューに表示
-(recentf-mode t)
-
-;; 最近使ったファイルの表示数
-(setq recentf-max-menu-items 10)
-
-;; 最近開いたファイルの保存数を増やす
-(setq recentf-max-saved-items 3000)
-
-;; ミニバッファの履歴を保存する
-(savehist-mode 1)
-
-;; ミニバッファの履歴の保存数を増やす
-(setq history-length 3000)
-
 ;; 1行ずつスクロール
 (setq scroll-conservatively 35
       scroll-margin 0
@@ -125,23 +110,14 @@
 ;; デバッグモードでの起動
 (require 'cl)
 
+;; Variables
 (setq make-backup-files nil)
 (setq auto-save-default nil)
 (setq backup-inhibited t)
 (setq delete-auto-save-files t)
-
-;; file-pointerを記憶しておく
-(require 'saveplace)
-(setq-default save-place t)
-
-;; start-up-screen 非表示
 (setq inhibit-startup-screen t)
-
-;; scratch first-message erasing
-(setq initial-scratch-message "")
-
-;; menu-bar非表示
 (menu-bar-mode -1)
+
 
 ;; title-barにfile-full-path表示
 (setq frame-title-format
@@ -152,16 +128,15 @@
 (set-face-attribute 'linum nil
                     :foreground "yellow"
                     :height 0.2)
+(set linum-format "%4d")
 
-;; 行番号フォーマット
-(set linum-format "%4d  ")
+;; Key config ;(use-package bind-key)
+(progn
+(bind-key* "C-c <left>" 'windmove-left)
+(bind-key* "C-c <down>" 'windmove-down)
+(bind-key* "C-c <up>" 'windmove-up)
+(bind-key* "C-c <right>" 'windmove-right))
 
-;; c-h => backspace
-(keyboard-translate ?\C-h ?\C-?)
-(global-set-key "\C-h" 'backward-delete-char)
-
-;; M-h => 単語単位でbackspace
-(global-set-key (kbd "M-h") 'backward-kill-word)
 
 ;;; wdired
 (use-package wdired)
@@ -219,7 +194,6 @@
  '(magit-hash ((t (:foreground "red"))))
 )
 
-
 ;; Flycheck
 (use-package flycheck
   :diminish flycheck-mode
@@ -243,7 +217,18 @@
    '(ruby-deep-indent-paren-style nil))
   (setq-default enh-ruby-node-insert-magic-comment t)
   (add-hook 'robe-mode-hook 'ac-robe-setup))
+(magic-filetype-set-auto-mode 'ruby)
+
+;;; begin enh-ruby-mode patch
+(defadvice enh-ruby-mode-set-encoding (around stop-enh-ruby-mode-set-encoding)
+  "If enh-ruby-not-insert-magic-comment is true, stops enh-ruby-mode-set-encoding."
+  (if (and (boundp 'enh-ruby-not-insert-magic-comment)
+	   (not enh-ruby-not-insert-magic-comment))
+      ad-do-it))
+(ad-activate 'enh-ruby-mode-set-encoding)
+(setq-default enh-ruby-not-insert-magic-comment t)
 ;;; enh-ruby-mode patch ends here
+
 
 ;; inf-ruby
 (use-package inf-ruby :defer t
@@ -296,8 +281,4 @@
            )
                     (buffer-list))))
 
-(global-set-key (kbd "C-c <left>") 'windmove-left)
-(global-set-key (kbd "C-c <down>") 'windmove-down)
-(global-set-key (kbd "C-c <up>")   'windmove-up)
-(global-set-key (kbd "C-c <right>") 'windmove-right)
 (put 'set-goal-column 'disabled nil)
