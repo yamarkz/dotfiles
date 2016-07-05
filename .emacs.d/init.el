@@ -211,6 +211,15 @@
 (bind-key "C-x m" 'magit-status)
 (bind-key "C-c l" 'magit-blame)
 
+(custom-set-faces
+ '(magit-diff-added ((t (:background "black" :foreground "green"))))
+ '(magit-diff-added-highlight ((t (:background "white" :foreground "green"))))
+ '(magit-diff-removed ((t (:background "black" :foreground "blue"))))
+ '(magit-diff-removed-hightlight ((t (:background "white" :foreground "blue"))))
+ '(magit-hash ((t (:foreground "red"))))
+)
+
+
 ;; Flycheck
 (use-package flycheck
   :diminish flycheck-mode
@@ -291,3 +300,4 @@
 (global-set-key (kbd "C-c <down>") 'windmove-down)
 (global-set-key (kbd "C-c <up>")   'windmove-up)
 (global-set-key (kbd "C-c <right>") 'windmove-right)
+(put 'set-goal-column 'disabled nil)
