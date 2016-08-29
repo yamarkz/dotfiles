@@ -1,5 +1,5 @@
-(source gnu)
 (source melpa)
+(source gnu)
 
 (depends-on "bind-key")
 (depends-on "cask")
@@ -13,6 +13,7 @@
 (depends-on "htmlize")
 (depends-on "idle-highlight-mode")
 (depends-on "magit")
+(depends-on "migemo")
 (depends-on "multiple-cursors")
 (depends-on "nyan-mode")
 (depends-on "pallet")

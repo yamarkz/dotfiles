@@ -49,7 +49,7 @@
 (global-set-key "\C-h" 'backward-delete-char)
 
 ;; M-h => 単語単位でbackspace
-(global-set-key (kbd "M") 'backward-kill-word)
+;;(global-set-key (kbd "M") 'backward-kill-word)
 
 ;; 画面中央にする
 (global-unset-key (kbd "C-l"));;prefix-keyとする
@@ -187,6 +187,8 @@
 
 ;; 改行と同時にインデントも行う
 (global-set-key "\C-m" 'newline-and-indent)
+
+(setq-default tab-width 4 indent-tabs-mode nil)
 
 ;; find-functionをキー割り当てする
 ;; - C-x Fをfind-functionに割り当て。

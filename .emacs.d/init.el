@@ -1,3 +1,10 @@
+;; cask
+(require 'cask "/usr/local/opt/cask/cask.el")
+(cask-initialize)
+(require 'use-package)
+(package-initialize)
+(pallet-mode t)
+
 ;; ------------------------------------------------
 ;; load-path auto-install.el
 ;; ------------------------------------------------
@@ -11,14 +18,6 @@
 
 ;; 各種読込 dir
 (add-to-load-path "elisp" "elpa")
-
 ;; init-loader読込(各種lisp読込)
 (require 'init-loader)
-(init-loader-load "~/.emacs.d/inits/")
-
-;; cask
-(require 'cask "/usr/local/opt/cask/cask.el")
-(cask-initialize)
-(require 'use-package)
-(package-initialize)
-(pallet-mode t)
+(init-loader-load "~/.emacs.d/inits")
