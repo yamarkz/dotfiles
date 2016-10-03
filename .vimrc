@@ -16,7 +16,7 @@ NeoBundle 'scrooloose/nerdtree'
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'tpope/vim-rails'
 NeoBundle 'tpope/vim-endwise'
-NeoBundle 'nathanaelkane/vim-indent-guides'
+NeoBundle 'Yggdroot/indentLine'
 
 
 call neobundle#end()
@@ -59,7 +59,9 @@ set guioptions+=a
 set ruler
 set title
 " とりあえずscheme指定でざっくり指定
-colorscheme railscasts
+syntax enable
+colorscheme solarized
+set background=dark
 " 検索
 set incsearch
 " 下線
@@ -91,8 +93,6 @@ autocmd BufWritePre * :%s/\s\+$//e
 set virtualedit+=block
 " no paste
 set nopaste
-" sytax color on/off
-syntax enable
 " カラースキーマの指定
 syntax on
 
@@ -100,8 +100,11 @@ syntax on
 filetype plugin indent on
 
 
-" vimを立ち上げた時に、自動的にvim-indent-guidesをオンにする
-let g:indent_guides_enable_on_vim_startup = 1
+let g:indentLine_color_term = 111
+let g:indentLine_color_gui = '#708090'
+"let g:indentLine_enabled = 0
+"let g:indentLine_leadingSpaceEnabled = 0
+let g:indentLine_char = '|' "use ¦, ┆ or │
 
 " escと同じ
 inoremap <C-c> <Esc>
