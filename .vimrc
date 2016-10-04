@@ -79,6 +79,8 @@ set matchtime=5
 set history=100
 " 入力途中のvimコマンドを右下に表示
 set showcmd
+" スクロール
+set scrolloff=0
 " バックアップファイル用ディレクトリ
 set backupdir=$HOME/backup
 " 大文字小文字検索無視
@@ -93,18 +95,17 @@ autocmd BufWritePre * :%s/\s\+$//e
 set virtualedit+=block
 " no paste
 set nopaste
+" no undo
+set noundofile
 " カラースキーマの指定
 syntax on
 
 " ファイルタイプ検出
 filetype plugin indent on
 
-
 let g:indentLine_color_term = 111
 let g:indentLine_color_gui = '#708090'
-"let g:indentLine_enabled = 0
-"let g:indentLine_leadingSpaceEnabled = 0
-let g:indentLine_char = '|' "use ¦, ┆ or │
+let g:indentLine_char = '|'
 
 " escと同じ
 inoremap <C-c> <Esc>
@@ -115,6 +116,11 @@ nnoremap <C-a> <Esc>^i
 nnoremap <C-e> <Esc>$a
 
 nnoremap <silent><C-j> :NERDTreeToggle<CR>
+
+nnoremap sn gt
+nnoremap sp gT
+nnoremap st :<C-u>tabnew<CR>
+nnoremap sT :<C-u>Unite tab<CR>
 
 " 括弧閉じ挿入
 imap { {}<LEFT>
