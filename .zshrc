@@ -122,6 +122,7 @@ alias sudo='sudo'
 alias -g L='| less'
 alias -g G='| grep'
 alias -g st='status'
+alias -g be='bundle exec'
 
 # C で表じゅう出力をクリップボードにコピーする
 if which pbcopy > /dev/null 2>&1 ; then
@@ -150,13 +151,28 @@ case ${OSTYPE} in
 		;;
 esac
 
+# Path to your oh-my-zsh installation.
+#export ZSH=~/.oh-my-zsh
 
-ZSH_THEME="wedisagree"
+#ZSH_THEME="wedisagree"
 
-plugins=(git)
+#plugins=(git)
 
-source $ZSH/oh-my-zsh.sh
+
+# User configuration
+
+export PATH="~/.rbenv/shims:/Users/yamaguchikazuteru/.rbenv/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/sbin:/usr/local/git/bin:/usr/local/nginx/sbin"
+# export MANPATH="/usr/local/man:$MANPATH"
+
+#source $ZSH/oh-my-zsh.sh
 
 # Node.js
 export NODE_PATH=$HOME/.nodebrew/current/lib/node_modules
 export PATH=$HOME/.nodebrew/current/bin:$PATH
+
+alias emacs='/Applications/Emacs.app/Contents/MacOS/Emacs -nw'
+if which swiftenv > /dev/null; then eval "$(swiftenv init -)"; fi
+
+
+alias vi='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/Vim "$@"'
+alias vim='env_LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/Vim "$@"'
