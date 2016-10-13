@@ -10,8 +10,6 @@ NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'ctrlpvim/ctrlp.vim'
 NeoBundle 'flazz/vim-colorschemes'
 NeoBundle 'Shougo/vimshell', { 'rev' : '3787e5' }
-
-
 NeoBundle 'scrooloose/nerdtree'
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'tpope/vim-rails'
@@ -116,6 +114,7 @@ nnoremap <C-a> <Esc>^i
 nnoremap <C-e> <Esc>$a
 
 nnoremap <silent><C-j> :NERDTreeToggle<CR>
+nnoremap <ESC> :noh<CR>
 
 nnoremap sn gt
 nnoremap sp gT
@@ -145,5 +144,3 @@ augroup END
 call ZenkakuSpace()
 endif
 """""""""""""""""""""""""""""
-
-
