@@ -1,5 +1,3 @@
-
-# 環境変数
 export LANG=ja_JP.UTF-8
 
 # 色を使用できるようにする
@@ -108,16 +106,13 @@ bindkey '^R' history-incremental-pattern-search-backward
 
 alias la='ls -a'
 alias ll='ls -l'
-
 alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
-
 alias mkdir='mkdir -p'
 
 # sudo の後のコマンドでエイリアスを有効にする
 alias sudo='sudo'
-
 # グローバルエイリアス
 alias -g L='| less'
 alias -g G='| grep'
@@ -153,26 +148,35 @@ esac
 
 # Path to your oh-my-zsh installation.
 #export ZSH=~/.oh-my-zsh
-
 #ZSH_THEME="wedisagree"
-
 #plugins=(git)
-
+#source $ZSH/oh-my-zsh.sh
 
 # User configuration
-
-export PATH="~/.rbenv/shims:/Users/yamaguchikazuteru/.rbenv/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/sbin:/usr/local/git/bin:/usr/local/nginx/sbin"
-# export MANPATH="/usr/local/man:$MANPATH"
-
-#source $ZSH/oh-my-zsh.sh
+export PATH="~/.rbenv/shims:~/.rbenv/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/sbin:/usr/local/git/bin:/usr/local/nginx/sbin"
 
 # Node.js
 export NODE_PATH=$HOME/.nodebrew/current/lib/node_modules
 export PATH=$HOME/.nodebrew/current/bin:$PATH
 
-alias emacs='/Applications/Emacs.app/Contents/MacOS/Emacs -nw'
-if which swiftenv > /dev/null; then eval "$(swiftenv init -)"; fi
+# rbenv
+eval "$(rbenv init -)"
 
+#
+# zplug
+#
+source ~/.zplug/init.zsh
 
-alias vi='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/Vim "$@"'
-alias vim='env_LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/Vim "$@"'
+zplug 'zsh-users/zsh-autosuggestions'
+zplug 'zsh-users/zsh-completions'
+zplug 'zsh-users/zsh-syntax-highlighting', nice:10
+zplug 'mollifier/anyframe'
+
+if ! zplug check --verbose; then
+  printf 'Install? [y/N]: '
+  if read -q; then
+    echo; zplug install
+  fi
+fi
+
+zplug load --verbose
