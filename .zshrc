@@ -109,6 +109,7 @@ zplug 'zsh-users/zsh-autosuggestions'
 zplug 'zsh-users/zsh-completions'
 zplug 'zsh-users/zsh-syntax-highlighting', nice:10
 zplug 'mollifier/anyframe'
+zplug "themes/wedisagree", from:oh-my-zsh
 
 # Support oh-my-zsh plugins and the like
 zplug "plugins/git",     from:oh-my-zsh, if:"which git"
