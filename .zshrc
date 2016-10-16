@@ -104,11 +104,11 @@ NAME='Kazuki Yamaguchi'
 #
 source ~/.zplug/init.zsh
 
-
-zplug 'zsh-users/zsh-autosuggestions'
-zplug 'zsh-users/zsh-completions'
-zplug 'zsh-users/zsh-syntax-highlighting', nice:10
-zplug 'mollifier/anyframe'
+#zplug 'zsh-users/zsh-autosuggestions'
+zplug "zsh-users/zsh-completions"
+zplug "zsh-users/zsh-syntax-highlighting", nice:10
+#zplug "zsh-users/zsh-256color"
+zplug "mollifier/anyframe"
 zplug "themes/wedisagree", from:oh-my-zsh
 
 # Support oh-my-zsh plugins and the like
@@ -119,7 +119,7 @@ zplug "plugins/tmux",    from:oh-my-zsh, if:"which tmux"
 zplug "plugins/bundler", from:oh-my-zsh, if:"which bundler"
 zplug "plugins/ruby",    from:oh-my-zsh, if:"which ruby"
 
-zplug "thems/blinks", from:oh-my-zsh
+#zplug "themes/blinks", from:oh-my-zsh
 zplug "lib/clipboard", from:oh-my-zsh, if:"[[ $OSTYPE =- *darwin* ]]"
 
 if ! zplug check --verbose; then
