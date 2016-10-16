@@ -1,5 +1,3 @@
-export LANG=ja_JP.UTF-8
-
 # 色を使用できるようにする
 autoload -Uz colors
 colors
@@ -100,77 +98,28 @@ setopt extended_glob
 # ^R で履歴検索をする時に * でワイルドカードを使用できるようにする
 bindkey '^R' history-incremental-pattern-search-backward
 
-
-##########################
-# エイリアス
-
-alias la='ls -a'
-alias ll='ls -l'
-alias rm='rm -i'
-alias cp='cp -i'
-alias mv='mv -i'
-alias mkdir='mkdir -p'
-
-# sudo の後のコマンドでエイリアスを有効にする
-alias sudo='sudo'
-# グローバルエイリアス
-alias -g L='| less'
-alias -g G='| grep'
-alias -g st='status'
-alias -g be='bundle exec'
-
-# C で表じゅう出力をクリップボードにコピーする
-if which pbcopy > /dev/null 2>&1 ; then
-	# Mac
-	alias -g C='| pbcopy'
-elif which xsel > /dev/null 2>&1 ; then
-	# Linux
-	alias -g C='| xsel --input --clipboard'
-elif which putclip > /dev/null 2>&1 ; then
-	# Cygwin
-	alias -g C='| putclip'
-fi
-
-
-########################
-# OS 別の設定
-case ${OSTYPE} in
-	darwin*)
-		# Mac用の設定
-		export CLICOLOR=1
-		alias ls='ls -G -F'
-		;;
-	linux*)
-		# Linux用の設定
-		alias ls='ls -F --color=auto'
-		;;
-esac
-
-# Path to your oh-my-zsh installation.
-#export ZSH=~/.oh-my-zsh
-#ZSH_THEME="wedisagree"
-#plugins=(git)
-#source $ZSH/oh-my-zsh.sh
-
-# User configuration
-export PATH="~/.rbenv/shims:~/.rbenv/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/sbin:/usr/local/git/bin:/usr/local/nginx/sbin"
-
-# Node.js
-export NODE_PATH=$HOME/.nodebrew/current/lib/node_modules
-export PATH=$HOME/.nodebrew/current/bin:$PATH
-
-# rbenv
-eval "$(rbenv init -)"
-
+NAME='Kazuki Yamaguchi'
 #
 # zplug
 #
 source ~/.zplug/init.zsh
 
+
 zplug 'zsh-users/zsh-autosuggestions'
 zplug 'zsh-users/zsh-completions'
 zplug 'zsh-users/zsh-syntax-highlighting', nice:10
 zplug 'mollifier/anyframe'
+
+# Support oh-my-zsh plugins and the like
+zplug "plugins/git",     from:oh-my-zsh, if:"which git"
+#zplug "plugins/rails",   from:oh-my-zsh, if:"which rails"
+zplug "plugins/brew",    from:oh-my-zsh, if:"which brew"
+zplug "plugins/tmux",    from:oh-my-zsh, if:"which tmux"
+zplug "plugins/bundler", from:oh-my-zsh, if:"which bundler"
+zplug "plugins/ruby",    from:oh-my-zsh, if:"which ruby"
+
+zplug "thems/blinks", from:oh-my-zsh
+zplug "lib/clipboard", from:oh-my-zsh, if:"[[ $OSTYPE =- *darwin* ]]"
 
 if ! zplug check --verbose; then
   printf 'Install? [y/N]: '
