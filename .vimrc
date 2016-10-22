@@ -93,6 +93,8 @@ autocmd BufWritePre * :%s/\s\+$//e
 set virtualedit+=block
 " no paste
 set nopaste
+" nowrap
+set nowrap
 " no undo
 set noundofile
 " カラースキーマの指定
