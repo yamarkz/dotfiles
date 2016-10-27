@@ -15,8 +15,6 @@ NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'tpope/vim-rails'
 NeoBundle 'tpope/vim-endwise'
 NeoBundle 'Yggdroot/indentLine'
-
-
 call neobundle#end()
 
 " Required:
@@ -103,7 +101,9 @@ syntax on
 " ファイルタイプ検出
 filetype plugin indent on
 
+" indentLine
 let g:indentLine_color_term = 111
+let g:indentLine_faster = 1
 let g:indentLine_color_gui = '#708090'
 let g:indentLine_char = '|'
 

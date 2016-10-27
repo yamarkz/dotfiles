@@ -24,11 +24,11 @@ select-word-style default
 zstyle ':zle:*' word-chars "/=;@:{},|"
 zstyle ':zle:*' word-style unspecified
 
-####################################
+###################################
 # 補完
 # 補完機能を有効にする
 autoload -Uz compinit
-compinit
+compinit -u
 
 # 補完で小文字でも大文字にマッチさせる
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
@@ -43,8 +43,7 @@ zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin \
 # ps コマンドのプロセス名補完
 zstyle ':completion:*:processes' command 'ps x -o pid,s,args'
 
-
-#################################
+################################
 # vcs_info
 autoload -Uz vcs_info
 autoload -Uz add-zsh-hook
@@ -58,8 +57,8 @@ fuction _update_vcs_info_msg() {
 }
 add-zsh-hook precmd _update_vcs_info_msg
 
-
-##############################
+#############################
+#############################
 # オプション
 # 日本語ファイル名を表示可能にする
 setopt print_eight_bit
@@ -91,14 +90,6 @@ setopt hist_reduce_blanks
 # 高機能なワイルドカード展開を使用する
 setopt extended_glob
 
-
-###########################
-# キーバインド
-
-# ^R で履歴検索をする時に * でワイルドカードを使用できるようにする
-bindkey '^R' history-incremental-pattern-search-backward
-
-NAME='Kazuki Yamaguchi'
 #
 # zplug
 #
@@ -107,7 +98,7 @@ source ~/.zplug/init.zsh
 #zplug 'zsh-users/zsh-autosuggestions'
 zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-syntax-highlighting", nice:10
-#zplug "zsh-users/zsh-256color"
+zplug "chrissicool/zsh-256color"
 zplug "mollifier/anyframe"
 zplug "themes/wedisagree", from:oh-my-zsh
 
