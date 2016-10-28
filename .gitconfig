@@ -1,27 +1,14 @@
 [core]
-   excludesfile = /your/file/path/.gitignore_global
-
-[core]
-  name = Kazuki Yamaguchi
-  email = y.kazuki0614n@gmail.com
-
-[color]
-  ui = auto
-
+	excludesfile = ~/.gitignore_global
+[user]
+	name = yamakichi
+	email = y.kazuki0614n@gmail.com
 [alias]
-  st    = status --short -branch
-  lo    = log --oneline --graph
-  co    = checkout
-  br    = branch
+  st   = status --short -branch
+  sh   = show
+  br   = branch
+  ba   = branch -a
+  co   = checkout
+  hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
+  log-all = log --graph --all --color --pretty='%x09%h %cn%x09%s %Cred%d%Creset']
 
-[push]
-  default = simple
-
-[core]
-  editor = vim +1 -c 'set fenc=utf-8'
-  preloadindex = true
-
-[help]
-
-[github]
-  user = katlez
