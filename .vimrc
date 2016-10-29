@@ -14,11 +14,12 @@ NeoBundle 'scrooloose/nerdtree'
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'tpope/vim-rails'
 NeoBundle 'tpope/vim-endwise'
-NeoBundle 'Yggdroot/indentLine'
+NeoBundle 'nathanaelkane/vim-indent-guides'
 call neobundle#end()
 
 " Required:
-filetype plugin indent on
+filetype off
+filetype plugin indent off
 
 NeoBundleCheck
 
@@ -37,7 +38,6 @@ set tabstop=2
 " 挿入モードでのインデント
 set shiftwidth=2
 set softtabstop=2
-set noexpandtab
 set smarttab
 " タブ入力を空白文字に置き換える
 set expandtab
@@ -97,16 +97,19 @@ set nowrap
 set noundofile
 " カラースキーマの指定
 syntax on
+" vim-indent-guides
+let g:indent_guides_auto_colors=0
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd   ctermbg=black
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven  ctermbg=darkgrey
+let g:indent_guides_enable_on_vim_startup=1
+let g:indent_guides_guide_size=1
+set ts=2 sw=2 et
+
 
 " ファイルタイプ検出
 filetype plugin indent on
 
-" indentLine
-let g:indentLine_color_term = 111
-let g:indentLine_faster = 1
-let g:indentLine_color_gui = '#708090'
-let g:indentLine_char = '|'
-
+"
 " escと同じ
 inoremap <C-c> <Esc>
 
@@ -145,4 +148,4 @@ if has('syntax')
 augroup END
 call ZenkakuSpace()
 endif
-"""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""
