@@ -15,6 +15,7 @@ NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'tpope/vim-rails'
 NeoBundle 'tpope/vim-endwise'
 NeoBundle 'nathanaelkane/vim-indent-guides'
+NeoBundle 'Shougo/unite.vim'
 call neobundle#end()
 
 " Required:
@@ -95,15 +96,52 @@ set nopaste
 set nowrap
 " no undo
 set noundofile
+" NERDTree ShowHidden
+let NERDTreeShowHidden = 1
 " カラースキーマの指定
 syntax on
 " vim-indent-guides
 let g:indent_guides_auto_colors=0
-autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd   ctermbg=black
-autocmd VimEnter,Colorscheme * :hi IndentGuidesEven  ctermbg=darkgrey
 let g:indent_guides_enable_on_vim_startup=1
+let g:indent_guides_start_level=2
 let g:indent_guides_guide_size=1
+let g:indent_guides_exclude_filetypes = ['help', 'nerdtree', 'tagbar', 'unite']
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#444433 ctermbg=black
+"autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#333344 ctermbg=darkgray
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#444433 ctermbg=black
+
 set ts=2 sw=2 et
+
+
+" unite
+let g:unite_source_history_yank_enable=1
+let g:unite_enable_start_insert=1
+nnoremap [unite] <Nop>
+nmap <Space>u [unite]
+" unite.vim keymap
+nnoremap <silent> [unite]u :<C-u>Unite<Space>file<CR>
+nnoremap <silent> [unite]g :<C-u>Unite<Space>grep<CR>
+nnoremap <silent> [unite]b :<C-u>Unite<Space>buffer<CR>
+"nnoremap <silent> [unite]b :<C-u>Unite<Space>bookmark<CR>
+"nnoremap <silent> [unite]a :<C-u>UniteBookmarkAdd<CR>
+nnoremap <silent> [unite]m :<C-u>Unite<Space>file_mru<CR>
+nnoremap <silent> [unite]h :<C-u>Unite<Space>history/yank<CR>
+nnoremap <silent> [unite]r :<C-u>Unite -buffer-name=register register<CR>
+nnoremap <silent> [unite]c :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
+nnoremap <silent> ,vr :UniteResume<CR>
+" vinarise
+let g:vinarise_enable_auto_detect=1
+" unite-build map
+nnoremap <silent> ,vb :Unite build<CR>
+nnoremap <silent> ,vcb :Unite build:!<CR>
+nnoremap <silent> ,vcg :UniteBuildClearHighlight<CR>
+
+" ag
+let g:unite_source_grep_command='ag'
+let g:unite_source_grep_default_opts='--nocolor --nogroup'
+let g:unite_source_grep_max_candidates=200
+let g:unite_source_grep_recursive_opt=''
+" end
 
 
 " ファイルタイプ検出
@@ -112,15 +150,12 @@ filetype plugin indent on
 "
 " escと同じ
 inoremap <C-c> <Esc>
-
 inoremap <C-a> <Esc>^i
 inoremap <C-e> <Esc>$a
 nnoremap <C-a> <Esc>^i
 nnoremap <C-e> <Esc>$a
-
 nnoremap <silent><C-j> :NERDTreeToggle<CR>
 nnoremap <ESC> :noh<CR>
-
 nnoremap sn gt
 nnoremap sp gT
 nnoremap st :<C-u>tabnew<CR>
