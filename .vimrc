@@ -7,7 +7,7 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 NeoBundle 'Shougo/neosnippet.vim'
 NeoBundle 'Shougo/neosnippet-snippets'
 NeoBundle 'tpope/vim-fugitive'
-NeoBundle 'ctrlpvim/ctrlp.vim'
+" NeoBundle 'ctrlpvim/ctrlp.vim'
 NeoBundle 'flazz/vim-colorschemes'
 NeoBundle 'Shougo/vimshell', { 'rev' : '3787e5' }
 NeoBundle 'scrooloose/nerdtree'
@@ -16,7 +16,14 @@ NeoBundle 'tpope/vim-rails'
 NeoBundle 'tpope/vim-endwise'
 NeoBundle 'nathanaelkane/vim-indent-guides'
 NeoBundle 'rking/ag.vim'
-"NeoBundle 'Shougo/unite.vim'
+NeoBundle 'Shougo/unite.vim'
+NeoBundle 'Shougo/neomru.vim'
+NeoBundle 'Shougo/vimproc.vim', {
+      \ 'build' : {
+      \     'mac' : 'make',
+      \     'linux' : 'make',
+      \    },
+      \ }
 call neobundle#end()
 
 " Required:
@@ -114,25 +121,58 @@ autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#444433 ctermbg=black
 autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#444433 ctermbg=black
 set ts=2 sw=2 et
 
-
 " ctrlp
-let g:ctrlp_cache_dir=$HOME.'/.cache/ctrlp'
-let g:ctrlp_clear_cache_on_exit=0
-let g:ctrlp_lazy_update=1
-let g:ctrlp_root_markers=['Gemfile', 'Gemfile.lock', '.gitignore']
-let g:ctrlp_max_height=20
-let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
-  \ 'file': '\v\.(exe|so|dll)$',
-  \ 'link': 'some_bad_symbolic_links',
-  \ }
-let g:ctrlp_user_command = 'ag %s -l'
+"let g:ctrlp_cache_dir=$HOME.'/.cache/ctrlp'
+"let g:ctrlp_clear_cache_on_exit=0
+"let g:ctrlp_lazy_update=1
+"let g:ctrlp_root_markers=['Gemfile', 'Gemfile.lock', '.gitignore']
+"let g:ctrlp_max_height=20
+"let g:ctrlp_custom_ignore = {
+"  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+"  \ 'file': '\v\.(exe|so|dll)$',
+"  \ 'link': 'some_bad_symbolic_links',
+"  \ }
+"let g:ctrlp_user_command = 'ag %s -l'
 
+"" unite.vim
+"The prefix key.
+let g:unite_enable_start_insert=1
+let g:unite_enable_ignore_case=1
+let g:unite_enable_smart=1
+let g:unite_source_history_yank_enable=1
+let g:unite_source_rec_max_cache_files = 15000
+
+nmap <Space> [unite]
+nnoremap <silent> [unite]a :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
+nnoremap <silent> [unite]p :<C-u>Unite<Space>file<CR>
+nnoremap <silent> [unite]m :<C-u>Unite<Space>buffer file_mru<CR>
+nnoremap <silent> [unite]d :<C-u>Unite<Space>directory_mru<CR>
+nnoremap <silent> [unite]b :<C-u>Unite<Space>buffer<CR>
+nnoremap <silent> [unite]r :<C-u>Unite<Space>register<CR>
+nnoremap <silent> [unite]t :<C-u>Unite<Space>tab<CR>
+nnoremap <silent> [unite]<CR> :<C-u>Unite<Space>file_rec/async:!<CR>
+"unite.vimを開いている間のキーマッピング
+autocmd FileType unite call s:unite_my_settings()
+function! s:unite_my_settings()"{{{
+  nmap <buffer> <ESC> <Plug>(unite_exit)
+endfunction"}}}
+
+"" unite-grep
+" unite-grepのバックエンドをagに切り替える
+let g:unite_source_grep_command='ag'
+let g:unite_source_grep_default_opts='--nocolor --nogroup'
+let g:unite_source_grep_recursive_opt=''
+let g:unite_source_grep_max_candidates=200
+
+"" grep検索結果の再呼出
+"nnoremap <silent> [unite]r :<C-u>UniteResume search-buffer<CR>
+
+"" 選択した文字列をunite-grep
+"vnoremap /g y:Unite grep::-iHRn:<C-R>=escape(@", '\\.*$^[]')<CR><CR>
 
 " ファイルタイプ検出
 filetype plugin indent on
 
-"
 " escと同じ
 inoremap <C-c> <Esc>
 inoremap <C-a> <Esc>^i
@@ -151,8 +191,6 @@ imap { {}<LEFT>
 imap [ []<LEFT>
 imap ( ()<LEFT>
 
-
-
 """"""""""""""""""""""""""""""
 " 全角スペースの表示
 """"""""""""""""""""""""""""""
@@ -169,3 +207,28 @@ augroup END
 call ZenkakuSpace()
 endif
 """"""""""""""""""""""""""""
+
+""""""""""""""""""""""""""""
+" .gitignore ignore_pattern
+""""""""""""""""""""""""""""
+function! s:unite_gitignore_source()
+  let sources = []
+  if filereadable('./.gitignore')
+    for file in readfile('./.gitignore')
+      if file !~ "^#\\|^\s\*$"
+       call add(sources, file)
+      endif
+    endfor
+  endif
+
+  if isdirectory('./.git')
+    call add(sources, '.git')
+  endif
+  call add(sources, '\(png\|gif\|jpeg\|jpg\)$')
+  let pattern = escape(join(sources, '|'), './|')
+  call unite#custom#source('file_rec', 'ignore_pattern', pattern)
+  call unite#custom#source('file_rec/async', 'ignore_pattern', pattern)
+  call unite#custom#source('grep', 'ignore_pattern', pattern)
+endfunction
+call s:unite_gitignore_source()
+"""""""""""""""""""""""""""
