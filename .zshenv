@@ -21,6 +21,7 @@ export LANG=ja_JP.UTF-8
 
 bindkey '^R' history-incremental-pattern-search-backward
 
+
 # C で表じゅう出力をクリップボードにコピーする
 if which pbcopy > /dev/null 2>&1 ; then
   # Mac
@@ -49,10 +50,6 @@ case ${OSTYPE} in
 esac
 
 export PATH="~/.rbenv/shims:~/.rbenv/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/sbin:/usr/local/git/bin:/usr/local/nginx/sbin"
-
-PATH="usr/local/bin:$PATH"     # for PHP55
-PATH="usr/local/sbin:$PATH"     # for php-fpm
-
 
 # rbenv
 eval "$(rbenv init -)"
