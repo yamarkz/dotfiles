@@ -11,8 +11,7 @@ SAVEHIST=1000000
 # 1行表示
 # PROMPT="%~ %#"
 # 2行表示
-PROMPT="%{${fg[green]%}[%n@%m]%{${reset_color}%} %~
-%# "
+PROMPT="%{${fg[green]%}[%n@%m]%{${reset_color}%} %~%"
 
 
 # 単語の区切り文字を指定する
@@ -58,7 +57,6 @@ fuction _update_vcs_info_msg() {
 add-zsh-hook precmd _update_vcs_info_msg
 
 #############################
-#############################
 # オプション
 # 日本語ファイル名を表示可能にする
 setopt print_eight_bit
@@ -95,22 +93,18 @@ setopt extended_glob
 #
 source ~/.zplug/init.zsh
 
-#zplug 'zsh-users/zsh-autosuggestions'
 zplug "zsh-users/zsh-completions"
-zplug "zsh-users/zsh-syntax-highlighting", nice:10
+zplug "zsh-users/zsh-syntax-highlighting"
 zplug "chrissicool/zsh-256color"
 zplug "mollifier/anyframe"
 zplug "themes/wedisagree", from:oh-my-zsh
 
 # Support oh-my-zsh plugins and the like
 zplug "plugins/git",     from:oh-my-zsh, if:"which git"
-#zplug "plugins/rails",   from:oh-my-zsh, if:"which rails"
 zplug "plugins/brew",    from:oh-my-zsh, if:"which brew"
 zplug "plugins/tmux",    from:oh-my-zsh, if:"which tmux"
 zplug "plugins/bundler", from:oh-my-zsh, if:"which bundler"
 zplug "plugins/ruby",    from:oh-my-zsh, if:"which ruby"
-
-#zplug "themes/blinks", from:oh-my-zsh
 zplug "lib/clipboard", from:oh-my-zsh, if:"[[ $OSTYPE =- *darwin* ]]"
 
 if ! zplug check --verbose; then
