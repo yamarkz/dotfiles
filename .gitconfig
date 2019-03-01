@@ -1,10 +1,10 @@
 [core]
 	excludesfile = ~/.gitignore_global
 [user]
-	name = yamakichi
+	name = yamarkz
 	email = y.kazuki0614n@gmail.com
 [alias]
-  st   = status --short -branch
+  st   = status
   sh   = show
   br   = branch
   ba   = branch -a
